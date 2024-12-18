@@ -19,7 +19,7 @@ class PostService
     {
         $query = Http::get("{$this->baseUrl}/posts")->json();
 
-        // Фільтруємо за пошуковим запитом
+        // Searching
         if (!empty($search)) {
             $query = array_filter($query, function ($post) use ($search) {
                 return stripos($post['id'], $search) !== false ||
@@ -28,14 +28,14 @@ class PostService
             });
         }
 
-        // Сортуємо
+        // Sorting
         usort($query, function ($a, $b) use ($sortColumn, $sortDirection) {
             return $sortDirection === 'asc'
                 ? strcmp($a[$sortColumn], $b[$sortColumn])
                 : strcmp($b[$sortColumn], $a[$sortColumn]);
         });
 
-        // Пагінація
+        // Pagination
         $offset = ($page - 1) * $limit;
         $data = array_slice($query, $offset, $limit);
 

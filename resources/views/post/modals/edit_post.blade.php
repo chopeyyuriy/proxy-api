@@ -15,13 +15,12 @@
             <div class="popup-group show">
                 <div class="popup-section">
                     <h4 class="popup-section__title">Title</h4>
-                    <input id="postTitle" class="input input-search" type="text" name="title" placeholder="Title"
-                           required>
+                    <input id="postTitle" class="input input-search" type="text" name="title" placeholder="Title">
                 </div>
 
                 <div class="popup-section">
                     <h4 class="popup-section__title">Body</h4>
-                    <input id="postBody" class="input input-search" type="text" name="body" placeholder="Body" required>
+                    <input id="postBody" class="input input-search" type="text" name="body" placeholder="Body">
                 </div>
             </div>
 
