@@ -26,7 +26,7 @@
                 <td><span class="table-query"><p>{{ $post['id'] }}</p></span></td>
                 <td>{{ $post['title'] }}</td>
                 <td>{{ $post['body'] }}</td>
-                <td><span class="table-view-arrow" data-popup-open="task-info-1"></span></td>
+                <td><span class="table-view-arrow showPost" data-id="{{ $post['id'] }}" data-popup-open="task-info-1"></span></td>
             </tr>
         @empty
             <tr>

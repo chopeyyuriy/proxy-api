@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Post\CreatePostRequest;
+use App\Http\Requests\Post\UpdatePostRequest;
 use App\Services\PostService;
 use Illuminate\Http\Request;
 
@@ -41,6 +43,45 @@ class PostController extends Controller
         }
 
         return view('post.index', $data);
+    }
+
+    public function createPost(CreatePostRequest $request)
+    {
+        $data = $request->all();
+        $this->service->createPost($data);
+
+        return redirect()->back()->with('success', 'Post successfully saved!');
+    }
+
+    public function showPost($id)
+    {
+        $post = $this->service->getPost($id);
+
+        if (empty($post)) {
+            return response()->json([]);
+        }
+
+        return response()->json([
+            'post' => $post
+        ]);
+    }
+
+    public function updatePost(UpdatePostRequest $request)
+    {
+        $data = $request->all();
+        $this->service->updatePost($data);
+
+        return redirect()->back()->with('success', 'Post successfully updated!');
+    }
+
+    public function deletePost(Request $request)
+    {
+        $data = $request->all();
+        $status = $this->service->deletePost($data['id']);
+
+        if ($status){
+            return redirect()->back()->with('success', 'Post successfully deleted!');
+        }
     }
 
 }

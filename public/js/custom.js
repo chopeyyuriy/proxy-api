@@ -34,5 +34,29 @@ $(document).ready(function () {
         const page = $(this).data('page');
         loadTable({page});
     });
+
+    // Show post
+    $(document).on('click', '.showPost', function () {
+        let id = $(this).data('id');
+        $.ajax({
+            url: "/_show-post/" + id,
+            method: "GET",
+            success: function (response) {
+                var post = response.post;
+
+                $('.postId').val(post.id);
+                $('#postTitle').val(post.title);
+                $('#postBody').val(post.body);
+            },
+        });
+    });
+
+    function hideAlerts() {
+        setTimeout(function () {
+            $('.alert').fadeOut("slow");
+        }, 3000);
+    }
+
+    hideAlerts();
 });
 

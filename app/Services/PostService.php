@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Http;
 
 class PostService
 {
+    /**
+     * User id
+     */
+    const USER_ID = 1;
+
     protected $baseUrl = 'https://jsonplaceholder.typicode.com';
 
     public function getPosts($page, $limit, $search, $sortColumn, $sortDirection)
@@ -51,9 +56,9 @@ class PostService
         return Http::post("{$this->baseUrl}/posts", $data)->json();
     }
 
-    public function updatePost($id, $data)
+    public function updatePost($data)
     {
-        return Http::put("{$this->baseUrl}/posts/{$id}", $data)->json();
+        return Http::put("{$this->baseUrl}/posts/{$data['id']}", $data)->json();
     }
 
     public function deletePost($id)
