@@ -10,9 +10,35 @@ class PostService
 {
     protected $baseUrl = 'https://jsonplaceholder.typicode.com';
 
-    public function getPosts()
+    public function getPosts($page, $limit, $search, $sortColumn, $sortDirection)
     {
-        return Http::get("{$this->baseUrl}/posts")->json();
+        $query = Http::get("{$this->baseUrl}/posts")->json();
+
+        // Фільтруємо за пошуковим запитом
+        if (!empty($search)) {
+            $query = array_filter($query, function ($post) use ($search) {
+                return stripos($post['id'], $search) !== false ||
+                    stripos($post['title'], $search) !== false ||
+                    stripos($post['body'], $search) !== false;
+            });
+        }
+
+        // Сортуємо
+        usort($query, function ($a, $b) use ($sortColumn, $sortDirection) {
+            return $sortDirection === 'asc'
+                ? strcmp($a[$sortColumn], $b[$sortColumn])
+                : strcmp($b[$sortColumn], $a[$sortColumn]);
+        });
+
+        // Пагінація
+        $offset = ($page - 1) * $limit;
+        $data = array_slice($query, $offset, $limit);
+
+        return [
+            'data' => $data,
+            'page' => $page,
+            'total' => count($query),
+        ];
     }
 
     public function getPost($id)

@@ -14,10 +14,33 @@ class PostController extends Controller
         $this->service = $service;
     }
 
-    public function posts()
+    public function posts(Request $request)
     {
-        $data['posts'] = $this->service->getPosts();
+        $page = $request->query('page', 1);
+        $limit = $request->query('limit', 10);
+        $search = $request->query('search', '');
+        $sortColumn = $request->query('sort_column', 'id');
+        $sortDirection = $request->query('sort_direction', 'asc');
+
+        $response = $this->service->getPosts($page, $limit, $search, $sortColumn, $sortDirection);
+
+        $data = [
+            'posts' => $response['data'],
+            'current_page' => $response['page'],
+            'total_pages' => ceil($response['total'] / $limit),
+            'total_records' => $response['total'],
+            'limit' => $limit,
+            'sort_column' => $sortColumn,
+            'sort_direction' => $sortDirection,
+        ];
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('post.partials.table', $data)->render(),
+            ]);
+        }
 
         return view('post.index', $data);
     }
+
 }
